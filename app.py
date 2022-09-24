@@ -47,8 +47,10 @@ def metrics():
     connection = get_db_connection()
     # post_count = connection.execute('SELECT count(title) FROM posts').fetchall()
     posts = connection.execute('SELECT * FROM posts').fetchall()
-    print(posts)
-    # post_count = 7
+    post_count = len(posts)
+
+    connections = connection.execute('select a.dbid,b.name, count(a.dbid) as TotalConnections from sys.sysprocesses a inner join sys.databases b on a.dbid = b.database_id group by a.dbid, b.name').fetchall()
+    print(connections)
     connection.close()
     dictionary = {'post_cound':post_count}
     response = app.response_class(
