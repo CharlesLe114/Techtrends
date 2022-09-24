@@ -30,11 +30,26 @@ def index():
     connection.close()
     return render_template('index.html', posts=posts)
 
-# Define the About Us page
+# Define the health check
 @app.route('/healthz')
 def healthz():
     response = app.response_class(
         response=json.dumps({"result":"OK - healthy"}),
+        status=200,
+        mimetype='application/json'
+    )
+
+    return response
+
+# Define the metrics check
+@app.route('/metrics')
+def metrics():
+    connection = get_db_connection()
+    post_count = connection.execute('SELECT count(title) FROM posts').fetchall()
+    connection.close()
+    response = app.response_class(
+        response=json.dumps({"post_count: {0}".format(post_count)})
+        # response=json.dumps({"status":"success","code":0,"data":{"db_connection_count": 1, "post_count": 7}}),
         status=200,
         mimetype='application/json'
     )
