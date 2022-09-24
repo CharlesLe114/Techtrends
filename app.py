@@ -46,7 +46,9 @@ def healthz():
 def metrics():
     connection = get_db_connection()
     # post_count = connection.execute('SELECT count(title) FROM posts').fetchall()
-    post_count = 7
+    posts = get_post()
+    print(posts)
+    # post_count = 7
     connection.close()
     dictionary = {'post_cound':post_count}
     response = app.response_class(
