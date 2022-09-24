@@ -39,7 +39,7 @@ def healthz():
         status=200,
         mimetype='application/json'
     )
-    app.logger.DEBUG("Status request successfull")
+    app.logger.info("Status request successfull")
     return response
 
 # Define the metrics check
@@ -61,7 +61,7 @@ def metrics():
         mimetype='application/json'
     )
 
-    app.logger.DEBUG("Metrics request successfull")
+    app.logger.info("Metrics request successfull")
     return response
 
 
@@ -71,16 +71,16 @@ def metrics():
 def post(post_id):
     post = get_post(post_id)
     if post is None:
-        app.logger.DEBUG("A non-existing article is accessed")
+        app.logger.info("A non-existing article is accessed")
         return render_template('404.html'), 404
     else:
-        app.logger.DEBUG("Article {0} retrieve".format(post["title"]))
+        app.logger.info("Article {0} retrieve".format(post["title"]))
         return render_template('post.html', post=post)
 
 # Define the About Us page
 @app.route('/about')
 def about():
-    app.logger.DEBUG("The 'About Us' page is retrieved.")
+    app.logger.info("The 'About Us' page is retrieved.")
     return render_template('about.html')
 
 # Define the post creation functionality 
@@ -98,7 +98,7 @@ def create():
                          (title, content))
             connection.commit()
             connection.close()
-            app.logger.DEBUG("Article {0} created".format(title))
+            app.logger.info("Article {0} created".format(title))
             return redirect(url_for('index'))
 
     return render_template('create.html')
