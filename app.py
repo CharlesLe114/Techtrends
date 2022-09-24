@@ -46,7 +46,7 @@ def healthz():
 def metrics():
     connection = get_db_connection()
     # post_count = connection.execute('SELECT count(title) FROM posts').fetchall()
-    posts = get_post()
+    posts = connection.execute('SELECT * FROM posts').fetchall()
     print(posts)
     # post_count = 7
     connection.close()
