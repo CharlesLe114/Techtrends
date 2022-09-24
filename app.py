@@ -48,7 +48,7 @@ def metrics():
     post_count = connection.execute('SELECT count(title) FROM posts').fetchall()
     connection.close()
     response = app.response_class(
-        response=json.dumps({"post_count: {0}".format(post_count)})
+        response=json.dumps({"post_count: {0}".format(post_count)}),
         # response=json.dumps({"status":"success","code":0,"data":{"db_connection_count": 1, "post_count": 7}}),
         status=200,
         mimetype='application/json'
