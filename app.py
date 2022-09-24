@@ -49,8 +49,8 @@ def metrics():
     connection.close()
     dictionary = {'post_cound':post_count}
     response = app.response_class(
-        response=json.dumps(dictionary),
-        # response=json.dumps({"status":"success","code":0,"data":{"db_connection_count": 1, "post_count": 7}}),
+        # response=json.dumps(dictionary),
+        response=json.dumps({"status":"success","code":0,"data":{"db_connection_count": 1, "post_count": 7}}),
         status=200,
         mimetype='application/json'
     )
