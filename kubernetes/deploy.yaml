@@ -3,14 +3,13 @@ kind: Deployment
 metadata:
   labels:
     app: techtrends
-  name: name:techtrends
+  name: techtrends
   namespace: sandbox
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nginx
-      tag: alpine
+      app: techtrends
   template:
     metadata:
       labels:
