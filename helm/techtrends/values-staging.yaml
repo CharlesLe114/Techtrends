@@ -1,0 +1,42 @@
+appName: techtrends
+namespace: staging
+
+replicaCount: 3
+
+image:
+  repository: lebaotoan/techtrends
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+ports:
+  name: app-port
+  containerPort: 3111
+  protocol: TCP
+
+livenessProbe:
+  path: /healthz
+  port: 3111
+
+readinessProbe:
+  path: /healthz
+  port: 3111
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits:
+    cpu: 500m
+    memory: 128Mi
+  requests:
+    cpu: 300m
+    memory: 90Mi
+
+
+service:
+  type: ClusterIP
+  port: 5111
+  targetPort: 3111
+  protocol: TCP

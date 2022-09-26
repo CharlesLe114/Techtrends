@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: techtrends
   labels:
     app: techtrends
-  name: techtrends
   namespace: sandbox
 spec:
   replicas: 1

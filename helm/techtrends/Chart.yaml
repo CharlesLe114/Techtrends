@@ -1,0 +1,9 @@
+apiVersion: v1
+name: techtrends
+description: Install TechTrends deployment
+version: 1.0.0
+keywords:
+- techtrends
+maintainers:
+- name: toanlebao
+  email: baotoanle114@gmail.com
