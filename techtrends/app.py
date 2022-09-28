@@ -5,11 +5,14 @@ from werkzeug.exceptions import abort
 import logging
 import sys
 
+conn_count = 0
 # Function to get a database connection.
 # This function connects to database with the name `database.db`
 def get_db_connection():
+    global conn_count
     connection = sqlite3.connect('database.db')
     connection.row_factory = sqlite3.Row
+    conn_count += 1
     return connection
 
 # Function to get a post using its ID
@@ -46,18 +49,17 @@ def healthz():
 # Define the metrics check
 @app.route('/metrics')
 def metrics():
+    global conn_count
     connection = get_db_connection()
-    # post_count = connection.execute('SELECT count(title) FROM posts').fetchall()
     posts = connection.execute('SELECT * FROM posts').fetchall()
     post_count = len(posts)
 
-    # connections = connection.execute('select a.dbid,b.name, count(a.dbid) as TotalConnections from sys.sysprocesses a inner join sys.databases b on a.dbid = b.database_id group by a.dbid, b.name').fetchall()
     # print(connections)
     connection.close()
     dictionary = {'post_cound':post_count}
     response = app.response_class(
         # response=json.dumps(dictionary),
-        response=json.dumps({"status":"success","code":0,"data":{"db_connection_count": 1, "post_count": post_count}}),
+        response=json.dumps({"status":"success","code":0,"data":{"db_connection_count": conn_count, "post_count": post_count}}),
         status=200,
         mimetype='application/json'
     )
@@ -72,7 +74,7 @@ def metrics():
 def post(post_id):
     post = get_post(post_id)
     if post is None:
-        app.logger.info("A non-existing article is accessed")
+        app.logger.error("A non-existing article is accessed")
         return render_template('404.html'), 404
     else:
         app.logger.info("Article {0} retrieve".format(post["title"]))
@@ -106,7 +108,11 @@ def create():
 
 # start the application on port 3111
 if __name__ == "__main__":
-    # logging.basicConfig(filename='app.log',stream=sys.stdout,level=logging.DEBUG)
-    logging.basicConfig(stream=sys.stdout,level=logging.DEBUG)
+    format_output = '%(levelname)s: %(name)-2s - [%(asctime)s] - %(message)s'
+    stdout_handler = logging.StreamHandler(sys.stdout)
+    stderr_handler = logging.StreamHandler(sys.stderr)  # TODO: stderr handler
+    handlers = [stderr_handler, stdout_handler]
+
+    logging.basicConfig(format = format_output,handlers=handlers,level=logging.DEBUG)
 
     app.run(host='0.0.0.0', port='3111')
