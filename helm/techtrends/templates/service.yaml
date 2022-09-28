@@ -1,6 +1,15 @@
 apiVersion: v1
-kind: Namespace
+kind: Service
 metadata:
   labels:
     app: {{ .Values.appName }}
-  name: {{ .Values.namespace }}
+  name: {{ .Values.appName }}
+  namespace: {{ .Values.namespace }}
+spec:
+  ports:
+  - port: {{ .Values.service.port }}
+    protocol: {{ .Values.service.protocol }}
+    targetPort: {{ .Values.service.targetPort }}
+  selector:
+    app: {{ .Values.appName }}
+  type: {{ .Values.service.type }}
